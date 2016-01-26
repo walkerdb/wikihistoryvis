@@ -10,6 +10,7 @@ class TestDataParser(unittest.TestCase):
 
         self.parser = data_parser.Parser(self.input_data)
         self.revisions = self.input_data["query"]["pages"]["1081"]["revisions"]
+        self.revisions.reverse()
 
     def test_revision_retrieval(self):
         self.assertEquals(self.parser.revisions, self.revisions)
