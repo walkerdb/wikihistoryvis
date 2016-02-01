@@ -1,0 +1,6 @@
+flask==0.10.1
+flask-WTF==0.11
+jinja2==2.7.3
+wtforms==2.0.2
+gunicorn==19.3.0
+requests==2.7.0
