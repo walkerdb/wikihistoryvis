@@ -1,4 +1,7 @@
+import requests
 from flask import Flask, render_template, request, redirect, url_for
+
+from wikihistoryvis import data_parser
 from wikihistoryvis.forms import WikiArticleForm
 
 app = Flask(__name__)
@@ -22,6 +25,15 @@ def show_user_summary(username):
 
 @app.route('/article/<article>', methods=["GET", "POST"])
 def show_article_summary(article):
+    address = "http://si410wiki.sites.uofmhosting.net/api.php?" \
+               "action=query&" \
+               "prop=revisions&" \
+               "rvlimit=max&" \
+               "rvprop=ids|flags|timestamp|comment|user|userid|size&" \
+               "format=json&" \
+               "titles={}".format(article)
+    data = requests.get(address)
+    parser = data_parser.Parser()
     return article
 
 
