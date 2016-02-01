@@ -1,1 +1,1 @@
-web: gunicorn gped:app
+web: gunicorn wikihistoryvis:app
