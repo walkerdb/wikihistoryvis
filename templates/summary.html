@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block summary %}
+<h1>Data for {{ title }}</h1>
+
+<div class="panel panel-default" id="filter-table">
+    <input class="search form-control" placeholder="Filter table"/>
+    <br>
+    <table class="table table-striped table-hover" data-sortable>
+        <thead>
+        <tr>
+            <th class="column1">User</th>
+            <th class="column2">Edit size</th>
+            <th class="column3">Comment</th>
+            <th class="column4">Time</th>
+            <th class="column5">Diff</th>
+        </tr>
+        </thead>
+        <tbody class="list">
+        {% for revision in revisions %}
+            <tr>
+                <td class="column1">{{ revision.user }}</td>
+                <td class="column2">{{ revision.change_size }}</td>
+                <td class="column3">{{ revision.comment }}</td>
+                <td class="column4">{{ revision.timestamp }}</td>
+                <td class="column5"><a href="http://si410wiki.sites.uofmhosting.net/index.php?title={{ title }}&diff={{ revision.revid }}&oldid={{ revision.parentid }}" target="_blank">see difference</a></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+<script src="{{ url_for('static', filename='sortable.min.js') }}"></script>
+<script src="{{ url_for('static', filename='list.min.js') }}"></script>
+<script>
+    var options = {
+        valueNames: ['column1', 'column2', 'column3', 'column4']
+    };
+
+    var tableList = new List('filter-table', options);
+</script>
+
+{% endblock %}

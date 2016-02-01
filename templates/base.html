@@ -3,25 +3,31 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>WikiHistory Vis</title>
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css')}}"/>
-{#    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css')}}"/>#}
-    <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='sticky-footer-navbar.css')}}" />
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}"/>
+    {#    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css')}}"/>#}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='sticky-footer-navbar.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.min.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.theme.min.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.structure.min.css') }}"/>
+
+
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'/>
-{#    <link href='http://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'/>#}
+    {#    <link href='http://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'/>#}
     <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
             {% block data %}{% endblock %}
             <br>
-{#            {% block error %}{% endblock %}#}
-{#            {% block home %}{% endblock %}#}
+            {% block summary %}{% endblock %}
+            {#            {% block error %}{% endblock %}#}
+            {#            {% block home %}{% endblock %}#}
         </div>
-        <div class="col-md-3">
-        </div>
+        {#        <div class="col-md-3">#}
+        {#        </div>#}
     </div>
 </div>
 
@@ -29,7 +35,26 @@
     <div class="container-fluid">
     </div>
 </footer>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src={{ url_for('static', filename="main.js") }}></script>
+<script src={{ url_for('static', filename="jquery-2.2.0.min.js") }}></script>
+<script src={{ url_for('static', filename="jquery-ui.min.js") }}></script>
+<script>
+    $("#article_name").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "http://si410wiki.sites.uofmhosting.net/api.php",
+                dataType: "jsonp",
+                data: {
+                    'action': "opensearch",
+                    'format': "json",
+                    'search': request.term
+                },
+                success: function (data) {
+                    response(data[1]);
+                }
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
