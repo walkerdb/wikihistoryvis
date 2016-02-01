@@ -1,1 +1,1 @@
-web: gunicorn wikihistoryvis:app
+web: gunicorn whv:app
