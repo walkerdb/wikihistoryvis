@@ -39,7 +39,7 @@ def show_article_summary(article):
     print(data)
     parser = data_parser.Parser(data)
 
-    return render_template("summary.html", revisions=parser.revisions, title=article)
+    return render_template("summary.html", parser=parser)
 
 
 if __name__ == '__main__':
