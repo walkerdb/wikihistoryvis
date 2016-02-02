@@ -1,75 +1,97 @@
 {% extends "base.html" %}
 
 {% block summary %}
-<h1>Data for {{ parser.article_title }}</h1>
+    <form action="" method="post" name="get-article">
+        {{ form.article_name(class_="form-control", id="article_name", placeholder="Enter the title of an article to summarize") }}
 
-<div class="panel panel-default">
-    <table class="table table-striped table-hover sortable-bootstrap" data-sortable>
-        <thead>
-        <tr>
-            <th class="1column1">User</th>
-            <th class="1column2" id="t1_default_sort">Total edits</th>
-            <th class="1column3">Total size of all changes</th>
-            <th class="1column4">Average edit size</th>
-
-        </tr>
-        </thead>
-        <tbody class="list">
-        {% for summary in parser.user_summaries %}
-            <tr>
-                <td class="1column1">{{ summary["user"] }}</td>
-                <td class="1column2">{{ summary["number of revisions"] }}</td>
-                <td class="1column3">{{ summary["total size of changes"] }}</td>
-                <td class="1column4">{{ summary["average edit size"] }}</td>
-            </tr>
-        {% endfor %}
-
-        </tbody>
-    </table>
-</div>
-
-<div class="panel panel-default" id="filter-table">
-    <input class="search form-control" placeholder="Filter table"/>
+    </form>
     <br>
-    <table class="table table-striped table-hover sortable-bootstrap" data-sortable>
-        <thead>
-        <tr>
-            <th class="column1">User</th>
-            <th class="column2">Edit size</th>
-            <th class="column3">Comment</th>
-            <th class="column4">Time</th>
-            <th class="column5">Diff</th>
-        </tr>
-        </thead>
-        <tbody class="list">
-        {% for revision in parser.revisions %}
+    <hr>
+    <br>
+    <h2>410 revision data: {{ parser.article_title }}</h2>
+    <p>There have been <strong>{{ parser.revisions|length }}</strong> edits to this article since its creation by
+        <strong>{{ parser.revisions[0].user.lower() }}</strong> on {{ parser.revisions[0].timestamp.split("T")[0] }}.</p>
+
+    <br>
+    <h3>User summary</h3>
+    <p><em>(click on any column to sort it)</em></p>
+
+    <div class="panel panel-default">
+        <table class="table table-striped table-hover sortable-bootstrap table-bordered" data-sortable>
+            <thead>
             <tr>
-                <td class="column1">{{ revision.user }}</td>
-                <td class="column2">{{ revision.change_size }}</td>
-                <td class="column3">{{ revision.comment }}</td>
-                <td class="column4">{{ revision["formatted date"] }}</td>
-                <td class="column5"><a href="http://si410wiki.sites.uofmhosting.net/index.php?title={{ title }}&diff={{ revision.revid }}&oldid={{ revision.parentid }}" target="_blank">see difference</a></td>
+                <th class="1column1 col-md-1">User</th>
+                <th class="1column2 col-md-1">Total edits</th>
+                <th class="1column3 col-md-1">Total addition size</th>
+                <th class="1column3 col-md-1">Total removal size</th>
+                <th class="1column4 col-md-1">Avg. data change / edit</th>
+                <th class="1column4 col-md-1">Net edit size</th>
+
             </tr>
-        {% endfor %}
+            </thead>
+            <tbody class="list">
+            {% for summary in parser.user_summaries %}
+                <tr>
+                    <td class="1column1"><a href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ summary["user"] }}" target="_blank">{{ summary["user"].lower() }}</a></td>
+                    <td class="1column2" style="text-align: right">{{ summary["number of revisions"] }}</td>
+                    <td class="1column3" style="text-align: right">{{ summary["total addition size"] }}</td>
+                    <td class="1column3" style="text-align: right">{{ summary["total removal size"] }}</td>
+                    <td class="1column4" style="text-align: right">{{ summary["average edit size"] }}</td>
+                    <td class="1column4" style="text-align: right">{{ summary["net edit size"] }}</td>
 
-        </tbody>
-    </table>
-</div>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <h3>Complete history</h3>
+    <div class="panel panel-default" id="filter-table">
+        <input class="search form-control" placeholder="Filter table"/>
+        <br>
+        <table class="table table-striped table-hover sortable-bootstrap table-bordered" data-sortable>
+            <thead>
+            <tr>
+                <th class="column1 col-md-1">User</th>
+                <th class="column2 col-md-1">Edit size</th>
+                <th class="column3 col-md-6">Comment</th>
+                <th class="column4 col-md-2">Time</th>
+                <th class="column5 col-md-2">Diff</th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for revision in parser.revisions %}
+                <tr>
+                    <td class="column1"><a href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ revision["user"] }}" target="_blank">{{ revision["user"].lower() }}</a></td>
+                    <td class="column2" style="text-align: right">{{ revision.change_size }}</td>
+                    <td class="column3">{{ revision.comment }}</td>
+                    <td class="column4">{{ revision["formatted date"] }}</td>
+                    <td class="column5"><a
+                            href="http://si410wiki.sites.uofmhosting.net/index.php?title={{ title }}&diff={{ revision.revid }}&oldid={{ revision.parentid }}"
+                            target="_blank">see difference</a></td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
 
 
-<script src="{{ url_for('static', filename='sortable.min.js') }}"></script>
-<script src="{{ url_for('static', filename='list.min.js') }}"></script>
-<script>
-    var options = {
-        valueNames: ['column1', 'column2', 'column3', 'column4']
-    };
+    <script src="{{ url_for('static', filename='sortable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='list.min.js') }}"></script>
+    <script>
+        var options = {
+            valueNames: ['column1', 'column2', 'column3', 'column4']
+        };
 
-    var tableList = new List('filter-table', options);
-</script>
-<script>
-    window.onload = function() {
-        (document.getElementById( 't1_default_sort' )).click();
-    };
-</script>
+        var tableList = new List('filter-table', options);
+    </script>
+    <script>
+        window.onload = function () {
+            (document.getElementById('t1_default_sort')).click();
+        };
+    </script>
 
 {% endblock %}

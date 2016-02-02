@@ -39,7 +39,11 @@ def show_article_summary(article):
     print(data)
     parser = data_parser.Parser(data)
 
-    return render_template("summary.html", parser=parser)
+    form = WikiArticleForm()
+    if request.method == "POST" and not form.article_name.errors:
+        return redirect(url_for("show_article_summary", article=form.article_name.data))
+
+    return render_template("summary.html", parser=parser, form=form)
 
 
 if __name__ == '__main__':

@@ -31,14 +31,25 @@ class Parser(object):
             user = revision["user"]
             time = datetime.datetime.strptime(revision["timestamp"], "%Y-%m-%dT%H:%M:%SZ")
             if user not in results:
-                results[user] = {"number of revisions": 0, "total size of changes": 0, "times of changes": []}
+                results[user] = {"number of revisions": 0,
+                                 "total size of changes": 0,
+                                 "total addition size": 0,
+                                 "total removal size": 0,
+                                 "times of changes": []}
 
             results[user]["number of revisions"] += 1
             results[user]["total size of changes"] += abs(int(revision.get("change_size", 0)))
+
+            if revision["change_size"] < 0:
+                results[user]["total removal size"] += revision["change_size"]
+            else:
+                results[user]["total addition size"] += revision["change_size"]
+
             results[user]["times of changes"].append(time)
 
         for user, data in results.items():
             results[user]["average edit size"] = int(data["total size of changes"] / data["number of revisions"])
+            results[user]["net edit size"] = data["total removal size"] + data["total addition size"]
 
         list_ = []
         for key, value in results.items():
