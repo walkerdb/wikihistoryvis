@@ -1,12 +1,24 @@
 {% extends "base.html" %}
 
 {% block data %}
-    <h1>mediawiki revision summaries</h1>
+    <h1>SI 410 revision summaries</h1>
     <br>
-    <p>Enter an article name:</p>
-    <form action="" method="post" name="get-article">
-        {{ form.article_name(class_="form-control", id="article_name", placeholder="Enter the title of an article to summarize") }}
-
-    </form>
-
+    <div class="row">
+        <div class="col-md-5">
+            <p>Enter an article name:</p>
+            <form action="" method="post" name="get-article">
+                {{ article_form.article_name(class_="form-control", id="article_name", placeholder="Enter the title of an article to summarize") }}
+            </form>
+        </div>
+        <div class="col-md-1">
+            <br>
+            <h4 class="text-center bottom-align-text"><strong>OR</strong></h4>
+        </div>
+        <div class="col-md-5">
+            <p>Enter a username:</p>
+            <form action="" method="post" name="get-user">
+                {{ user_form.user_name(class_="form-control", id="user_name", placeholder="Enter a username to summarize") }}
+            </form>
+        </div>
+    </div>
 {% endblock %}

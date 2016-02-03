@@ -1,6 +1,6 @@
 import unittest
 
-from wikihistoryvis import data_parser
+from wikihistoryvis import article_revision_parser
 
 
 class TestDataParser(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestDataParser(unittest.TestCase):
         self.test_revisions = self.input_data["query"]["pages"]["1081"]["revisions"]
         self.test_revisions.reverse()
 
-        self.parser = data_parser.Parser(self.input_data)
+        self.parser = article_revision_parser.Parser(self.input_data)
 
     def test_revision_retrieval(self):
         self.assertEquals(self.parser.revisions, self.test_revisions)

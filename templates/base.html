@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>WikiHistory Vis</title>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}"/>
-    {#    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css')}}"/>#}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='sticky-footer-navbar.css') }}"/>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.min.css') }}"/>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='jquery-ui.theme.min.css') }}"/>
@@ -38,6 +38,7 @@
 </footer>
 <script src={{ url_for('static', filename="jquery-2.2.0.min.js") }}></script>
 <script src={{ url_for('static', filename="jquery-ui.min.js") }}></script>
+{% block scripts %}{% endblock %}
 <script>
     $("#article_name").autocomplete({
         source: function (request, response) {
