@@ -41,7 +41,7 @@ class Parser(object):
                 results[title]['created page'] = "yes"
 
         for title, data in results.items():
-            results[title]['average edit size'] = int((data['total addition size'] + abs(data['total removal size'])) / data['edit count'])
+            results[title]['average edit size'] = int((data['total addition size'] + data['total removal size']) / data['edit count'])
             results[title]['net edit size'] = data['total addition size'] + data['total removal size']
 
         list_ = []

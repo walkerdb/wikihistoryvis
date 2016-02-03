@@ -58,13 +58,10 @@
                     <tbody class="list">
                     {% for page in parser.edits_by_page %}
                         <tr>
-                            <td><a href="http://si410wiki.sites.uofmhosting.net/index.php/{{ page["title"] }}"
-                                   target="_blank">{{ page["title"] }}</a></td>
-                            <td class="1column1"><a href="../../article/{{ page["title"] }}" target="_blank"><em>see
-                                summary</em></a></td>
+                            <td><a href="http://si410wiki.sites.uofmhosting.net/index.php/{{ page["title"] }}" target="_blank">{{ page["title"] }}</a></td>
+                            <td class="1column1"><a href="../../article/{{ page["title"] }}" target="_blank"><em>see summary</em></a></td>
                             <td class="1column2" style="text-align: right">{{ page["edit count"] }}</td>
-                            <td class="1column3 addition"
-                                style="text-align: right">{{ page["total addition size"] }}</td>
+                            <td class="1column3 addition" style="text-align: right" data-value="{{ page["total addition size"] }}">+{{ page["total addition size"] }}</td>
                             <td class="1column3 removal" style="text-align: right">{{ page["total removal size"] }}</td>
                             <td class="1column4" style="text-align: right">{{ page["average edit size"] }}</td>
                             <td class="1column4" style="text-align: right">{{ page["net edit size"] }}</td>
@@ -96,15 +93,11 @@
                     <tbody class="list">
                     {% for summary in parser.edits_by_user %}
                         <tr>
-                            <td class="1column1"><a
-                                    href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ summary["user"] }}"
-                                    target="_blank">{{ summary["user"].lower() }}</a></td>
+                            <td class="1column1"><a href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ summary["user"] }}" target="_blank">{{ summary["user"].lower() }}</a></td>
                             <td><a href="../../user/{{ summary["user"] }}" target="_blank"><em>see summary</em></a></td>
                             <td class="1column2" style="text-align: right">{{ summary["edit count"] }}</td>
-                            <td class="1column3" style="text-align: right"><span
-                                    class="addition">{{ summary["total addition size"] }}</span></td>
-                            <td class="1column3" style="text-align: right"><span
-                                    class="removal">{{ summary["total removal size"] }}</span></td>
+                            <td class="1column3 addition" style="text-align: right" data-value="{{ summary["total addition size"] }}">+{{ summary["total addition size"] }}</td>
+                            <td class="1column3 removal" style="text-align: right">{{ summary["total removal size"] }}</td>
                             <td class="1column4" style="text-align: right">{{ summary["average edit size"] }}</td>
                             <td class="1column4" style="text-align: right">{{ summary["net edit size"] }}</td>
 
