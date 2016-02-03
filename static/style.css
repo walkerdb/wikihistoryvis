@@ -5,3 +5,12 @@
 .addition {
     color: #006400;
 }
+
+.nav-tabs {
+    margin-bottom: 15px;
+}
+
+#table-filter{
+    border: 0 solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
