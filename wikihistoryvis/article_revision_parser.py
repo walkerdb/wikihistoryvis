@@ -3,11 +3,17 @@ from operator import itemgetter
 
 
 class Parser(object):
-    def __init__(self, input_data):
-        self.input_data = input_data
-        self.revisions = self.create_revisions_list()
-        self.article_title = self.get_article_title()
-        self.user_summaries = self.create_user_summaries()
+    def __init__(self, input_data, article_title):
+        self.article_title = article_title
+        try:
+            self.input_data = input_data
+            self.revisions = self.create_revisions_list()
+            self.user_summaries = self.create_user_summaries()
+        except:
+            self.input_data = ""
+            self.revisions = []
+            self.user_summaries = []
+
 
     def create_revisions_list(self):
         revisions = self.get_revision()

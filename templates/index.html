@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-5">
             <p>Enter an article name:</p>
+
             <form action="" method="post" name="get-article">
                 {{ article_form.article_name(class_="form-control", id="article_name", placeholder="Enter the title of an article to summarize") }}
             </form>
@@ -16,9 +17,115 @@
         </div>
         <div class="col-md-5">
             <p>Enter a username:</p>
+
             <form action="" method="post" name="get-user">
                 {{ user_form.user_name(class_="form-control", id="user_name", placeholder="Enter a username to summarize") }}
             </form>
         </div>
     </div>
+
+    <br>
+    <hr>
+    <br>
+    <h4>Recent changes</h4>
+    <p>There have been <strong>{{ parser.edits|length }}</strong> edits across
+        <strong>{{ parser.edits_by_page|length }}</strong> pages by <strong>{{ parser.edits_by_user|length }}</strong>
+        users since {{ parser.edits[-1].timestamp.split("T")[0] }}.
+    </p>
+    <br>
+
+    <div>
+        <ul class="nav nav-pills" role="tablist" id="tabs">
+            <li role="presentation" data-toggle="tab"><a href="#page_summary">Summary by page</a></li>
+            <li role="presentation" data-toggle="tab"><a href="#user_summary">Summary by user</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="panel panel-default tab-pane" id="page_summary">
+                <table class="table table-striped table-hover sortable-bootstrap table-bordered"
+                       id="recent_revisions_by_page" data-sortable>
+                    <thead>
+                    <tr>
+                        <th class="1column1 col-md-2">Title</th>
+                        <th class="1column1 col-md-1">Edit summary</th>
+                        <th class="1column2 col-md-1">Total edits</th>
+                        <th class="1column3 col-md-1">Total + size</th>
+                        <th class="1column3 col-md-1">Total - size</th>
+                        <th class="1column4 col-md-1">Avg. edit size</th>
+                        <th class="1column4 col-md-1">Net edit size</th>
+
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+                    {% for page in parser.edits_by_page %}
+                        <tr>
+                            <td><a href="http://si410wiki.sites.uofmhosting.net/index.php/{{ page["title"] }}"
+                                   target="_blank">{{ page["title"] }}</a></td>
+                            <td class="1column1"><a href="../../article/{{ page["title"] }}" target="_blank"><em>see
+                                summary</em></a></td>
+                            <td class="1column2" style="text-align: right">{{ page["edit count"] }}</td>
+                            <td class="1column3 addition"
+                                style="text-align: right">{{ page["total addition size"] }}</td>
+                            <td class="1column3 removal" style="text-align: right">{{ page["total removal size"] }}</td>
+                            <td class="1column4" style="text-align: right">{{ page["average edit size"] }}</td>
+                            <td class="1column4" style="text-align: right">{{ page["net edit size"] }}</td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            {#    <h3>Changes by user</h3>#}
+
+            <div class="panel panel-default tab-pane" id="user_summary">
+                <table class="table table-striped table-hover sortable-bootstrap table-bordered"
+                       id="recent_revisions_by_user" data-sortable>
+                    <thead>
+                    <tr>
+                        <th class="1column1 col-md-1">User</th>
+                        <th class="1column1 col-md-1">User summary</th>
+                        <th class="1column2 col-md-1">Total edits</th>
+                        <th class="1column3 col-md-1">Total + size</th>
+                        <th class="1column3 col-md-1">Total - size</th>
+                        <th class="1column4 col-md-1">Avg. edit size</th>
+                        <th class="1column4 col-md-1">Net edit size</th>
+
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+                    {% for summary in parser.edits_by_user %}
+                        <tr>
+                            <td class="1column1"><a
+                                    href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ summary["user"] }}"
+                                    target="_blank">{{ summary["user"].lower() }}</a></td>
+                            <td><a href="../../user/{{ summary["user"] }}" target="_blank"><em>see summary</em></a></td>
+                            <td class="1column2" style="text-align: right">{{ summary["edit count"] }}</td>
+                            <td class="1column3" style="text-align: right"><span
+                                    class="addition">{{ summary["total addition size"] }}</span></td>
+                            <td class="1column3" style="text-align: right"><span
+                                    class="removal">{{ summary["total removal size"] }}</span></td>
+                            <td class="1column4" style="text-align: right">{{ summary["average edit size"] }}</td>
+                            <td class="1column4" style="text-align: right">{{ summary["net edit size"] }}</td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#tabs').find('a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        $('#tabs').find('a:first').tab('show')
+    </script>
 {% endblock %}
