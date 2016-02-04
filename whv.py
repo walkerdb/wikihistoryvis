@@ -42,6 +42,7 @@ def show_user_summary(username):
               "action=query&" \
               "list=usercontribs&" \
               "uclimit=500&" \
+              "ucprop=ids|title|timestamp|comment|sizediff&" \
               "format=json&" \
               "ucuser={}".format(username)
 

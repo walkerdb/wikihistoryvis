@@ -30,10 +30,10 @@ class Parser(object):
                                   'edit count': 0,
                                   'created page': "-"}
 
-            if edit['size'] < 0:
-                results[title]['total removal size'] += edit['size']
+            if edit['sizediff'] < 0:
+                results[title]['total removal size'] += edit['sizediff']
             else:
-                results[title]['total addition size'] += edit['size']
+                results[title]['total addition size'] += edit['sizediff']
 
             results[title]['edit count'] += 1
 

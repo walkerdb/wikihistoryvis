@@ -39,10 +39,10 @@
                             <th class="1column1 col-md-1">Edit summary</th>
                             <th class="1column2 col-md-1">Total edits</th>
                             <th class="1column1 col-md-1">Created page?</th>
-                            {#                <th class="1column3 col-md-1">Total + size</th>#}
-                            {#                <th class="1column3 col-md-1">Total - size</th>#}
-                            {#                <th class="1column4 col-md-1">Avg. edit size</th>#}
-                            {#                <th class="1column4 col-md-1">Net edit size</th>#}
+                            <th class="1column3 col-md-1">Total + size</th>
+                            <th class="1column3 col-md-1">Total - size</th>
+                            <th class="1column4 col-md-1">Avg. edit size</th>
+                            <th class="1column4 col-md-1">Net edit size</th>
 
                         </tr>
                         </thead>
@@ -55,10 +55,10 @@
                                     summary</em></a></td>
                                 <td class="1column2" style="text-align: right">{{ page["edit count"] }}</td>
                                 <td class="1column2" style="text-align: right">{{ page["created page"] }}</td>
-                                {#                    <td class="1column3 addition" style="text-align: right">{{ page["total addition size"] }}</td>#}
-                                {#                    <td class="1column3 removal" style="text-align: right">{{ page["total removal size"] }}</td>#}
-                                {#                    <td class="1column4" style="text-align: right">{{ page["average edit size"] }}</td>#}
-                                {#                    <td class="1column4" style="text-align: right">{{ page["net edit size"] }}</td>#}
+                                <td class="1column3 addition" style="text-align: right">{{ page["total addition size"] }}</td>
+                                <td class="1column3 removal" style="text-align: right">{{ page["total removal size"] }}</td>
+                                <td class="1column4" style="text-align: right">{{ page["average edit size"] }}</td>
+                                <td class="1column4" style="text-align: right">{{ page["net edit size"] }}</td>
 
                             </tr>
                         {% endfor %}
@@ -76,7 +76,8 @@
                            id="full_revision_history_{{ parser.article_title }}" data-sortable>
                         <thead>
                         <tr>
-                            <th class="column1 col-md-3">Page</th>
+                            <th class="column1 col-md-2">Page</th>
+                            <th class="column2 col-md-1">Edit size</th>
                             <th class="column3 col-md-5">Comment</th>
                             <th class="column4 col-md-2">Time</th>
                             <th class="column5 col-md-2">Diff</th>
@@ -90,6 +91,9 @@
                                         target="_blank">{{ edit["title"] }}</a> <sup><a
                                         href="../../article/{{ edit["title"] }}#{{ edit["revid"] }}"
                                         target="_blank">[summary]</a></sup></td>
+                                <td class="column2 {% if edit.sizediff < 0 %}removal{% else %}addition{% endif %}"
+                                    style="text-align: right" data-value="{{ edit.sizediff }}">
+                                    {% if edit.sizediff >= 0 %}+{% endif %}{{ edit.sizediff }}</td>
                                 <td class="column3">{{ edit.comment }}</td>
                                 <td class="column4">{{ edit["timestamp"].replace("T", " ").strip("Z") }}</td>
                                 <td class="column5"><a
