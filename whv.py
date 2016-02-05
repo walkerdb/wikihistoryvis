@@ -15,7 +15,7 @@ def index():
     address = "http://si410wiki.sites.uofmhosting.net/api.php?" \
               "action=query&" \
               "list=recentchanges&" \
-              "rcprop=title|ids|sizes|flags|user|timestamp&" \
+              "rcprop=title|ids|sizes|flags|user|timestamp|comment&" \
               "rclimit=1000&" \
               "rctype=edit|external|new&" \
               "format=json"
