@@ -21,7 +21,7 @@ class Parser(object):
                                   "unique users": set()}
 
             results[title]["edit count"] += 1
-            edit_size = edit["oldlen"] - edit["newlen"]
+            edit_size = edit["newlen"] - edit["oldlen"]
 
             if edit_size < 0:
                 results[title]["total removal size"] += edit_size
@@ -55,7 +55,7 @@ class Parser(object):
                                   "unique pages": set()}
 
             results[user]["edit count"] += 1
-            edit_size = edit["oldlen"] - edit["newlen"]
+            edit_size = edit["newlen"] - edit["oldlen"]
 
             if edit_size < 0:
                 results[user]["total removal size"] += edit_size

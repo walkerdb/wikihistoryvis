@@ -22,8 +22,8 @@ def index():
 
     data = requests.get(address).json()['query']['recentchanges']
     parser = recent_changes_parser.Parser(data)
-    pprint(data)
-    print(len(data))
+    # pprint(data)
+    # print(len(data))
 
     article_form = WikiArticleForm()
     user_form = WikiUserForm()
@@ -47,7 +47,7 @@ def show_user_summary(username):
               "ucuser={}".format(username)
 
     data = requests.get(address).json()['query']['usercontribs']
-    pprint(data)
+    # pprint(data)
 
     parser = user_revision_parser.Parser(data, username)
 
