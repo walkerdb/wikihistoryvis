@@ -45,9 +45,9 @@
     <br>
     <div>
         <ul class="nav nav-tabs" role="tablist" id="tabs">
-            <li role="presentation" data-toggle="tab"><a href="#page_summary">Summary by page</a></li>
-            <li role="presentation" data-toggle="tab"><a href="#user_summary">Summary by user</a></li>
             <li role="presentation" data-toggle="tab"><a href="#all_changes">All revisions</a></li>
+            <li role="presentation" data-toggle="tab"><a href="#user_summary">Summary by user</a></li>
+            <li role="presentation" data-toggle="tab"><a href="#page_summary">Summary by page</a></li>
             <li id="dates-form-li" class="pull-right">
                 <form class="form-inline" action="{{ url_for('index') }}" method="GET">
                     <div class="form-group">
@@ -156,7 +156,7 @@
                             <td><a href="http://si410wiki.sites.uofmhosting.net/index.php/{{ edit["title"] }}" target="_blank">{{ edit["title"] }}</a></td>
                             <td class="{% if edit["newlen"] - edit["oldlen"] < 0 %}removal{% else %}addition{% endif %}" style="text-align: right" data-value="{{ edit["newlen"] - edit["oldlen"] }}">{% if edit["newlen"] - edit["oldlen"] >= 0 %}+{% endif %}{{ edit["newlen"] - edit["oldlen"] }}</td>
                             <td>{{ edit.comment }}</td>
-                            <td>{{ edit.timestamp.replace("T", " ").strip("Z") }}</td>
+                            <td data-value="{{ edit.timestamp }}">{{ edit.time.relativestring() }},<span class="text-right">{{ edit.time.datetime().strftime(" %I:%M %p").replace(" 0", " ") }}</span></td>
                             <td><a href="http://si410wiki.sites.uofmhosting.net/index.php?title={{ edit.title }}&diff={{ edit.revid }}&oldid={{ edit.parentid }}" target="_blank">see difference</a></td>
                         </tr>
                     {% endfor %}

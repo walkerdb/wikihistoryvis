@@ -9,9 +9,18 @@ class Parser(object):
         self.newest_date = newest_date
         self.today = datetime.date.today()
 
-        self.edits = edits
+        self.edits = self.parse_timestamps(edits)
         self.edits_by_page = self.group_by_key("title")
         self.edits_by_user = self.group_by_key("user")
+
+    @staticmethod
+    def parse_timestamps(edits):
+        parsed_edits = []
+        for edit in edits:
+            edit["time"] = Chronyk(edit["timestamp"])
+            parsed_edits.append(edit)
+
+        return parsed_edits
 
     @staticmethod
     def filter_by_date(edits, start_date, end_date):
