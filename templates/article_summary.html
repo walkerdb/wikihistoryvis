@@ -15,7 +15,7 @@
         <p>Page does not exist!</p>
     {% else %}
         <p>There have been <strong>{{ parser.revisions|length }}</strong> edits to this article since its creation by
-            <strong>{{ parser.revisions[0].user.lower() }}</strong> on {{ parser.revisions[0].timestamp.split("T")[0] }}.
+            <strong>{{ parser.revisions[-1].user.lower() }}</strong> on {{ parser.revisions[-1].timestamp.split("T")[0] }}.
         </p>
 
 
