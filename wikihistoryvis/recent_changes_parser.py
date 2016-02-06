@@ -35,6 +35,9 @@ class Parser(object):
 
         return filtered_edits
 
+    def get_chronyk_result(self, date):
+        return Chronyk(date, timezone=self.timezone)
+
     def group_by_key(self, key):
         results = {}
         for edit in self.edits:

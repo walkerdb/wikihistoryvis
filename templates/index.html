@@ -156,7 +156,7 @@
                             <td><a href="http://si410wiki.sites.uofmhosting.net/index.php/{{ edit["title"] }}" target="_blank">{{ edit["title"] }}</a></td>
                             <td class="{% if edit["newlen"] - edit["oldlen"] < 0 %}removal{% else %}addition{% endif %}" style="text-align: right" data-value="{{ edit["newlen"] - edit["oldlen"] }}">{% if edit["newlen"] - edit["oldlen"] >= 0 %}+{% endif %}{{ edit["newlen"] - edit["oldlen"] }}</td>
                             <td>{{ edit.comment }}</td>
-                            <td data-value="{{ edit.timestamp }}">{{ edit.time.relativestring(timezone=parser.timezone) }},<span class="text-right">{{ edit.time.datetime().strftime(" %I:%M %p").replace(" 0", " ") }}</span></td>
+                            <td data-value="{{ edit.timestamp }}">{{ edit.time.relativestring(now=parser.get_chronyk_result("now").timestamp(), timezone=parser.timezone) }},<span class="text-right">{{ edit.time.datetime().strftime(" %I:%M %p").replace(" 0", " ") }}</span></td>
                             <td><a href="http://si410wiki.sites.uofmhosting.net/index.php?title={{ edit.title }}&diff={{ edit.revid }}&oldid={{ edit.parentid }}" target="_blank">see difference</a></td>
                         </tr>
                     {% endfor %}
