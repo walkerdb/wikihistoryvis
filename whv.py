@@ -1,9 +1,11 @@
+import datetime
 import json
 from pprint import pprint
 import requests
+from chronyk import Chronyk
 from flask import Flask, render_template, request, redirect, url_for
 from wikihistoryvis import article_revision_parser, user_revision_parser, recent_changes_parser
-from wikihistoryvis.forms import WikiArticleForm, WikiUserForm
+from wikihistoryvis.forms import WikiArticleForm, WikiUserForm, DateFacetForm
 
 app = Flask(__name__)
 app.config.update(WTF_CSRF_ENABLED=True,
@@ -12,28 +14,38 @@ app.config.update(WTF_CSRF_ENABLED=True,
 
 @app.route('/', methods=["GET", "POST"])
 def index():
+    oldest_date = request.args.get('start_date', '')
+    oldest_date = Chronyk(oldest_date) if oldest_date else Chronyk(datetime.datetime.now() - datetime.timedelta(days=7))
+
+    newest_date = request.args.get('end_date', '')
+    newest_date = Chronyk(newest_date) if newest_date else Chronyk(datetime.datetime.now())
+
     address = "http://si410wiki.sites.uofmhosting.net/api.php?" \
               "action=query&" \
               "list=recentchanges&" \
               "rcprop=title|ids|sizes|flags|user|timestamp|comment&" \
               "rclimit=1000&" \
               "rctype=edit|external|new&" \
-              "format=json"
+              "rcstart={}&" \
+              "rcend={}&" \
+              "format=json".format(newest_date.datetime().strftime("%Y%m%d%H%M%S"), oldest_date.datetime().strftime("%Y%m%d000000"))
 
     data = requests.get(address).json()['query']['recentchanges']
-    parser = recent_changes_parser.Parser(data)
+    parser = recent_changes_parser.Parser(data, oldest_date, newest_date)
     # pprint(data)
     # print(len(data))
 
     article_form = WikiArticleForm()
     user_form = WikiUserForm()
+    dates_form = DateFacetForm()
 
-    if request.method == "POST" and not article_form.article_name.errors and article_form.article_name.data:
-        return redirect(url_for("show_article_summary", article=article_form.article_name.data))
-    elif request.method == "POST" and not user_form.errors and user_form.user_name.data:
-        return redirect(url_for("show_user_summary", username=user_form.user_name.data))
+    if request.method == "POST":
+        if not article_form.article_name.errors and article_form.article_name.data:
+            return redirect(url_for("show_article_summary", article=article_form.article_name.data))
+        elif not user_form.errors and user_form.user_name.data:
+            return redirect(url_for("show_user_summary", username=user_form.user_name.data))
     else:
-        return render_template("index.html", article_form=article_form, user_form=user_form, parser=parser)
+        return render_template("index.html", article_form=article_form, user_form=user_form, dates_form=dates_form, parser=parser)
 
 
 @app.route('/user/<username>', methods=["GET", "POST"])

@@ -28,17 +28,27 @@
     <hr>
     <br>
     <h4>Recent changes</h4>
-    <p>There have been <strong>{{ parser.edits|length }}</strong> edits across
+    <p>There were <strong>{{ parser.edits|length }}</strong> edits across
         <strong>{{ parser.edits_by_page|length }}</strong> pages by <strong>{{ parser.edits_by_user|length }}</strong>
-        users since {{ parser.edits[-1].timestamp.split("T")[0] }}.
+        users {% if parser.oldest_date.relativestring() == "7 days ago" %}in the last week{% else %}between {{ parser.oldest_date.date().strftime("%b. %d").replace(" 0", " ") }} and {{ parser.newest_date.date().strftime("%b. %d").replace(" 0", " ") }}{% endif %}.
     </p>
     <br>
-
     <div>
         <ul class="nav nav-tabs" role="tablist" id="tabs">
             <li role="presentation" data-toggle="tab"><a href="#page_summary">Summary by page</a></li>
             <li role="presentation" data-toggle="tab"><a href="#user_summary">Summary by user</a></li>
             <li role="presentation" data-toggle="tab"><a href="#all_changes">All revisions</a></li>
+            <li id="dates-form-li" class="pull-right">
+                <form class="form-inline" action="{{ url_for('index') }}" method="GET">
+                    <div class="form-group">
+                        {{ dates_form.start_date(class_="form-control", id="start_date", placeholder="date to start facet from") }}
+                    </div>
+                    <div class="form-group">
+                        {{ dates_form.end_date(class_="form-control", id="end_date", placeholder="date to end facet at") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Facet results by date</button>
+                </form>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="panel panel-default tab-pane" id="page_summary">
