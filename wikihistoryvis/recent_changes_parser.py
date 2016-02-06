@@ -14,11 +14,10 @@ class Parser(object):
         self.edits_by_page = self.group_by_key("title")
         self.edits_by_user = self.group_by_key("user")
 
-    @staticmethod
-    def parse_timestamps(edits):
+    def parse_timestamps(self, edits):
         parsed_edits = []
         for edit in edits:
-            edit["time"] = Chronyk(edit["timestamp"])
+            edit["time"] = Chronyk(edit["timestamp"], timezone=self.timezone)
             parsed_edits.append(edit)
 
         return parsed_edits
