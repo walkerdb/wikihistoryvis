@@ -1,6 +1,4 @@
 import datetime
-import json
-from pprint import pprint
 import requests
 from chronyk import Chronyk
 from flask import Flask, render_template, request, redirect, url_for
