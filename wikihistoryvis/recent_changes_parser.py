@@ -8,6 +8,7 @@ class Parser(object):
         self.oldest_date = oldest_date
         self.newest_date = newest_date
         self.today = datetime.date.today()
+        self.timezone = 18000
 
         self.edits = self.parse_timestamps(edits)
         self.edits_by_page = self.group_by_key("title")
