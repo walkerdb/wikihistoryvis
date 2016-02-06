@@ -1,33 +1,90 @@
 {% extends "base.html" %}
 
-{% block summary %}
-    <form action="" method="post" name="get-user">
-        {{ form.user_name(class_="form-control", id="user_name", placeholder="Enter a username to create summary for") }}
-
+{% block searchbar %}
+    <form action="" class="navbar-form navbar-right" role="search" method="post" name="get-user">
+        <div class="form-group">
+            {{ form.user_name(class_="form-control", id="user_name", placeholder="Enter a new user to summarize") }}
+        </div>
+        <button type="submit" class="btn btn-default">Summarize</button>
     </form>
-    <br>
+{% endblock %}
+
+{% block summary %}
+    <h2>User edit summary: <span class="addition">{{ parser.username }}</span></h2>
     <hr>
-    <br>
-    <h2>user edit summary: <span class="addition">{{ parser.username }}</span></h2>
     {% if parser.edits|length == 0 %}
         <p><a href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ parser.username }}" target="_blank">
-            <strong>{{ parser.username }}</strong></a> has no edits!</p>
+            <strong>{{ parser.username }}</strong></a> either does not exist or they did not make any edits in the given
+            time range ({{ parser.oldest_date.relativestring() }} to {{ parser.newest_date.relativestring() }})</p>
+        <br>
+        <p>Try a new date range?</p>
+        <form class="form-inline" action="./{{ parser.username }}" method="GET">
+            <div class="form-group">
+                {{ dates_form.start_date(class_="form-control", id="start_date", placeholder="date to start summary") }}
+            </div>
+            <div class="form-group">
+                {{ dates_form.end_date(class_="form-control", id="end_date", placeholder="date to end summary") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Summarize over date range</button>
+        </form>
     {% else %}
         <p>
             <a href="http://si410wiki.sites.uofmhosting.net/index.php/User:{{ parser.username }}" target="_blank">
                 <strong>{{ parser.username }}</strong>
             </a>
-            has made <strong>{{ parser.edits|length }}</strong> edits across
-            <strong>{{ parser.edits_by_page|length }}</strong> pages.
+            has made
+            <strong>{{ parser.edits|length }} edits</strong>
+            across
+            <strong>{{ parser.edits_by_page|length }} pages</strong>
+            {% if parser.oldest_date.date().year - parser.oldest_edit.date().year < -3 %}
+                {% if parser.newest_date.date() == parser.today %}
+                    since their first edit on {{ parser.oldest_edit.date().strftime("%b. %d, %Y") }}.
+                {% else %}
+                    between their first edit on {{ parser.oldest_edit.date().strftime("%b. %d") }}
+                    {% if parser.oldest_edit.date().year != parser.newest_date.date().year %}
+                        , {{ parser.oldest_edit.date().year }}
+                    {% endif %}
+                    and {{ parser.newest_date.date().strftime("%b. %d, %Y") }}
+                {% endif %}
+            {% else %}
+                {% if parser.newest_date.date() == parser.today %}
+                    since {{ parser.oldest_date.date().strftime("%b. %d, %Y") }}.
+                {% else %}
+                    between {{ parser.oldest_date.date().strftime("%b. %d") }}
+                    {% if parser.oldest_date.date().year != parser.newest_date.date().year %}
+                        , {{ parser.oldest_date.date().year }}
+                    {% endif %}
+                    and {{ parser.newest_date.date().strftime("%b. %d, %Y") }}
+                {% endif %}
+            {% endif %}
         </p>
-        {#    <p>They have added <span class="addition"><strong>{{ parser.total_addition_size }}</strong></span> bytes of content and have removed <span class="removal"><strong>{{ parser.total_removal_size }}</strong></span> bytes, for a net total of <strong>{{ parser.total_addition_size + parser.total_removal_size }}</strong>.</p>#}
+        <p>
+            In that time they have created <strong>{{ parser.total_created_pages }} pages</strong>, added
+            <span class="addition"><strong>{{ parser.total_addition_size }}</strong></span>
+            bytes of content, and have removed
+            <span class="removal"><strong>{{ parser.total_removal_size }}</strong></span>
+            bytes, for a net total contribution of
+            <strong>{{ parser.total_addition_size + parser.total_removal_size }}</strong>
+            bytes.
+        </p>
 
         <br>
-
+        <br>
         <div>
             <ul class="nav nav-tabs" role="tablist" id="tabs">
-                <li role="presentation" data-toggle="tab"><a href="#page_summary">Summary by page</a></li>
+                <li role="presentation" data-toggle="tab"><a href="#page_summary">Activity by page</a></li>
                 <li role="presentation" data-toggle="tab"><a href="#filter-table">Full user history</a></li>
+                <li id="dates-form-li" class="pull-right">
+                    <form class="form-inline" action="./{{ parser.username }}" method="GET">
+                        <div class="form-group">
+                            {{ dates_form.start_date(class_="form-control", id="start_date", placeholder="date to start summary") }}
+                        </div>
+                        <div class="form-group">
+                            {{ dates_form.end_date(class_="form-control", id="end_date", placeholder="date to end summary") }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Summarize over date range</button>
+                    </form>
+                </li>
             </ul>
             <div class="tab-content">
                 <div class="panel panel-default tab-pane" id="page_summary">
@@ -55,8 +112,10 @@
                                     summary</em></a></td>
                                 <td class="1column2" style="text-align: right">{{ page["edit count"] }}</td>
                                 <td class="1column2" style="text-align: right">{{ page["created page"] }}</td>
-                                <td class="1column3 addition" style="text-align: right">{{ page["total addition size"] }}</td>
-                                <td class="1column3 removal" style="text-align: right">{{ page["total removal size"] }}</td>
+                                <td class="1column3 addition"
+                                    style="text-align: right">{{ page["total addition size"] }}</td>
+                                <td class="1column3 removal"
+                                    style="text-align: right">{{ page["total removal size"] }}</td>
                                 <td class="1column4" style="text-align: right">{{ page["average edit size"] }}</td>
                                 <td class="1column4" style="text-align: right">{{ page["net edit size"] }}</td>
 

@@ -1,3 +1,7 @@
+body{
+    padding-top: 55px;
+}
+
 .removal {
     color: #8b0000;
 }
@@ -13,6 +17,10 @@
 #table-filter{
     border: 0 solid #ccc;
     border-bottom: 1px solid #ccc;
+}
+
+#article_name, #user_name {
+    min-width: 300px;
 }
 
 /*#dates-form-li{*/

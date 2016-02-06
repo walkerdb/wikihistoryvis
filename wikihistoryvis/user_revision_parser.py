@@ -1,20 +1,30 @@
+import datetime
 from operator import itemgetter
+
+from chronyk import Chronyk
 
 
 class Parser(object):
-    def __init__(self, data, username):
+    def __init__(self, data, username, oldest_date, newest_date):
+        self.username = username
+        self.oldest_date = oldest_date
+        self.newest_date = newest_date
+        self.today = datetime.date.today()
+        self.total_created_pages = 0
+
         if not data:
             self.edits = []
             self.edits_by_page = []
             self.total_addition_size = 0
             self.total_removal_size = 0
+            self.oldest_edit = ""
+
         else:
             self.edits = [item for item in data if item['ns'] == 0]
             self.edits_by_page = self.summarize_by_page(self.edits)
             self.total_addition_size = sum([edit['total addition size'] for edit in self.edits_by_page])
             self.total_removal_size = sum([edit['total removal size'] for edit in self.edits_by_page])
-
-        self.username = username.lower()
+            self.oldest_edit = Chronyk(self.edits[-1]["timestamp"])
 
     def summarize_by_page(self, edits):
         results = {}
@@ -38,6 +48,7 @@ class Parser(object):
             results[title]['edit count'] += 1
 
             if 'new' in edit:
+                self.total_created_pages += 1
                 results[title]['created page'] = "yes"
 
         for title, data in results.items():
